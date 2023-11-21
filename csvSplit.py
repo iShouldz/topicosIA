@@ -12,7 +12,7 @@ def split_csv(input_file, chunk_size, output_prefix):
 
 
 input_csv = 'csv/hashRepoURL.csv'
-chunk_size = 5000
-output_prefix = 'csv/split5000/CSV5000.csv'
+chunk_size = 4000
+output_prefix = 'csv/split4000/CSV4000'
 
 split_csv(input_csv, chunk_size, output_prefix)
