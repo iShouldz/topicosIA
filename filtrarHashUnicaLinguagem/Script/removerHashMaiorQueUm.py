@@ -1,16 +1,10 @@
 import pandas as pd
 
-# Ler o arquivo CSV
-df = pd.read_csv('../../csv/ListagemUsernames.csv')
+# Ler o arquivo de texto com as informações
+info_por_hash = pd.read_csv('../CSVOut/info_por_hash.txt', sep='\t')
 
-# Contar o número de linguagens diferentes para cada hash
-contagem_por_hash = df.groupby('hash')['linguagem_programacao'].nunique()
+# Filtrar as linhas onde a quantidade de linguagens é igual a 1
+info_filtrado = info_por_hash[info_por_hash['quantidade_linguagens'] == 1]
 
-# Filtrar hashes com quantidade de linguagens igual a 1
-hashes_com_uma_linguagem = contagem_por_hash[contagem_por_hash == 1].index
-
-# Filtrar o DataFrame original
-df_filtrado = df[df['hash'].isin(hashes_com_uma_linguagem)]
-
-# Salvar o novo DataFrame em um novo arquivo CSV
-df_filtrado.to_csv('hashUnicoCommit.csv', index=False)
+# Salvar o novo DataFrame em um novo arquivo de texto
+info_filtrado.to_csv('../CSVOut/info_filtrado.txt', index=False, sep='\t')
