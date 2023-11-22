@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Ler o arquivo CSV
-df = pd.read_csv('../csv/ListagemUsernames.csv')
+df = pd.read_csv('../../csv/ListagemUsernames.csv')
 
 # Filtrar as linhas que não contêm 'Markdown' na coluna 'linguagem_programacao'
 df_filtrado = df[df['linguagem_programacao'] != 'Markdown']

@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Ler o arquivo CSV
-df = pd.read_csv('../csv/ListagemUsernames.csv')
+df = pd.read_csv('../../csv/ListagemUsernames.csv')
 
 # Contar o número de linguagens diferentes para cada hash
 contagem_por_hash = df.groupby('hash')['linguagem_programacao'].nunique()
