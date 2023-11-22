@@ -2,15 +2,12 @@ import requests
 import pandas as pd
 import time
 
-token = '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'
-token2 = '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'
+token ='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'
 
-conta2 = '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'
 listaUsuarios = []
-arrayCsv = ['../csv/split5000/CSV5000.csv_1.csv', '../csv/split5000/CSV5000.csv_2.csv',
-            '../csv/split5000/CSV5000.csv_3.csv', '../csv/split5000/CSV5000.csv_4.csv',
-            '../csv/split5000/CSV5000.csv_5.csv', '../csv/split5000/CSV5000.csv_6.csv',
-            '../csv/split5000/CSV5000.csv_7.csv', '../csv/split5000/CSV5000.csv_8.csv']
+arrayCsv = ['../csv/split4000/CSV4000_4.csv', '../csv/split4000/CSV4000_5.csv',
+            '../csv/split4000/CSV4000_6.csv', '../csv/split4000/CSV4000_7.csv',
+            '../csv/split4000/CSV4000_8.csv', '../csv/split4000/CSV4000_9.csv']
 
 def get_username(repository_url, real_name, commit_hash):
     user, repo = repository_url.split('/')[-2:]
@@ -26,7 +23,9 @@ def get_username(repository_url, real_name, commit_hash):
         data = response.json()
         # print(data)
         if data['author'] is None:
-            return None
+            return 'autor nulo'
+        elif data['author'].get('login') is None:
+            return 'autor nulo'
         if data['commit']['author']['name'].lower() == real_name.lower():
             #print(data['author']['login'])
             return data['author']['login']
@@ -34,16 +33,14 @@ def get_username(repository_url, real_name, commit_hash):
 
 def processar_csv(input_csv, output_csv):
     try:
-        # Tenta ler o arquivo CSV existente
         df_resultados = pd.read_csv(output_csv)
     except FileNotFoundError:
-        # Se o arquivo não existir, cria um DataFrame vazio
         df_resultados = pd.DataFrame(columns=['username', 'repositorio', 'hash', 'linguagem_programacao'])
     df_novo = pd.read_csv(input_csv)
     listaUsuarios = []
 
     for index, row in df_novo.iterrows():
-        print(index)
+        print(index + 1)
         username = get_username(row['repositorio'], row['autor_commit'], row['hash'])
         if username is not None:
             user = {
@@ -53,14 +50,16 @@ def processar_csv(input_csv, output_csv):
                 'linguagem_programacao': str(row['linguagem_programacao'])
             }
             listaUsuarios.append(user)
-            #print(user)
+            print(user)
         if index % 3000 == 0 and index != 0:
             print(f"Atingido o limite de 3000 iterações. Pausando por 2 minutos...")
-            time.sleep(120)
+            time.sleep(300)
 
     df_resultados = pd.concat([df_resultados, pd.DataFrame(listaUsuarios)], ignore_index=True)
     df_resultados.to_csv(output_csv, index=False)
 
-processar_csv('../csv/split4000/CSV4000_1.csv', '../csv/ListagemUsernames.csv')
-
+for i in arrayCsv:
+    processar_csv(i, '../csv/ListagemUsernames.csv')
+    time.sleep(3800)
+    print('ARQUIVO FINALIZADO' + str(i))
 
